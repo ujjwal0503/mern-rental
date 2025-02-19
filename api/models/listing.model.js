@@ -10,11 +10,15 @@ const listingSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    address: {
+    location: {
       type: String,
       required: true,
     },
-    rentalPricePerDay: {
+    rentalPrice: {
+      type: Number,
+      required: true,
+    },
+    discountPrice: {
       type: Number,
       required: true,
     },
@@ -32,7 +36,7 @@ const listingSchema = new mongoose.Schema(
         required: true,
         enum: ['New', 'Good', 'Average', 'Needs Repair'], // Equipment condition
     },
-    imageUrls: {
+    images: {
       type: Array,
       required: true,
     },
