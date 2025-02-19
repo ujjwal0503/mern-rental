@@ -36,7 +36,7 @@ const listingSchema = new mongoose.Schema(
         required: true,
         enum: ['New', 'Good', 'Average', 'Needs Repair'], // Equipment condition
     },
-    images: {
+    imageUrls: {
       type: Array,
       required: true,
     },
