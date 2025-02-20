@@ -56,4 +56,51 @@ export const getListing = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-}
+};
+
+//can be Wrong
+export const getListings = async (req, res, next) => {
+  try {
+    const limit = parseInt(req.query.limit) || 9;
+    const startIndex = parseInt(req.query.startIndex) || 0;
+    let offer = req.query.offer;
+
+    if (offer === undefined || offer === 'false') {
+      offer = { $in: [false, true] };
+    } else {
+      offer = offer === 'true';
+    }
+
+    let type = req.query.type;
+
+    if (type === undefined || type === 'all') {
+      type = { $in: ['sale', 'rent'] };
+    }
+
+    let category = req.query.category;
+
+    if (category === undefined || category === 'all') {
+      category = { $in: ['Tractor', 'Harvester', 'Plow', 'Seeder', 'Irrigation System', 'Other'] };
+    }
+
+    const searchTerm = req.query.searchTerm || '';
+
+    const sort = req.query.sort || 'createdAt';
+
+    const order = req.query.order || 'desc';
+
+    const listings = await Listing.find({
+      name: { $regex: searchTerm, $options: 'i' },
+      offer,
+      type,
+      category,
+    })
+      .sort({ [sort]: order })
+      .limit(limit)
+      .skip(startIndex);
+
+    return res.status(200).json(listings);
+  } catch (error) {
+    next(error);
+  }
+};
