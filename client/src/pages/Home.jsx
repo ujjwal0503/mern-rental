@@ -53,9 +53,10 @@ export default function Home() {
     <div>
       {/* Top Section */}
       <div className='flex flex-col gap-6 p-28 px-3 max-w-6xl mx-auto'>
-        <h1 className='text-green-900 font-bold text-3xl lg:text-6xl'>
-          Rent or Buy <span className='text-green-500'>Farm Equipments</span>
-          <br /> With Ease
+        <h1 className='text-gray-600 font-bold text-3xl lg:text-6xl'>
+          Rent or Buy <span className='text-green-700'>Farm Equipments</span>
+          <br /> With Ease with <span className='text-green-500'>Farm</span>
+          <span className='text-slate-700'>Tech</span>
         </h1>
         <div className='text-gray-500 text-xs sm:text-sm'>
         Find top-quality agricultural equipment for rent or sale, designed to meet the needs of farmers and agribusinesses.
@@ -64,7 +65,7 @@ export default function Home() {
         </div>
         <Link
           to={'/search'}
-          className='text-xs sm:text-sm text-green-800 font-bold hover:underline'
+          className='text-xs sm:text-sm text-green-500 font-bold hover:underline'
         >
           Get Started...
         </Link>

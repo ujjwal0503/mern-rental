@@ -4,7 +4,8 @@ export default function About() {
   return (
     <div className="py-20 px-4 max-w-6xl mx-auto text-center">
       <h1 className="text-4xl font-extrabold mb-6 text-slate-800">
-        About <span className="text-green-500">FarmTech</span>
+        About <span className='text-green-500'>Farm</span>
+              <span className='text-slate-700'>Tech</span>
       </h1>
       <p className="text-lg text-slate-700 max-w-3xl mx-auto mb-8">
         Your trusted platform for renting and purchasing high-quality agricultural equipment. 
