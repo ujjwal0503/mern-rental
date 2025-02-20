@@ -74,19 +74,42 @@ export default function CreateListing() {
   };
 
   const handleChange = (e) => {
-    const { id, value, type, checked } = e.target;
-    if (id === 'sale' || id === 'rent') {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        type: id,
-      }));
-    } else {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [id]: type === 'checkbox' ? checked : value,
-      }));
+    if (e.target.id === 'sale' || e.target.id === 'rent') {
+      setFormData({
+        ...formData,
+        type: e.target.id,
+      });
+    }
+
+    if (e.target.id === 'offer') {
+      setFormData({
+        ...formData,
+        [e.target.id]: e.target.checked,
+      });
+    }
+
+    if (
+      e.target.type === 'number' ||
+      e.target.type === 'text' ||
+      e.target.type === 'textarea'
+    ) {
+      setFormData({
+        ...formData,
+        [e.target.id]: e.target.value,
+      });
+    }
+
+    if (
+      e.target.id === 'category' ||
+      e.target.id === 'condition'
+    ) {
+      setFormData({
+        ...formData,
+        [e.target.id]: e.target.value,
+      });
     }
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -169,15 +192,30 @@ export default function CreateListing() {
 
           {/* Checkboxes */}
           <div className="flex gap-6 flex-wrap">
-            <div className="flex gap-2">
-              <input type="checkbox" id="rent" className="w-5" onChange={handleChange}
-                checked={formData.type === 'rent'} />
-              <span>Available for Rent</span>
+          <div className='flex gap-2'>
+              <input
+                type='checkbox'
+                id='sale'
+                className='w-5'
+                onChange={handleChange}
+                checked={formData.type === 'sale'}
+              />
+              <span>Sell</span>
+            </div>
+            <div className='flex gap-2'>
+              <input
+                type='checkbox'
+                id='rent'
+                className='w-5'
+                onChange={handleChange}
+                checked={formData.type === 'rent'}
+              />
+              <span>Rent</span>
             </div>
             <div className="flex gap-2">
-              <input type="checkbox" id="sale" className="w-5" onChange={handleChange}
-                checked={formData.type === 'sale'}/>
-              <span>For Sell</span>
+              <input type="checkbox" id="offer" className="w-5" onChange={handleChange}
+                checked={formData.offer}/>
+              <span>Offer</span>
             </div>
           </div>
 
@@ -215,6 +253,7 @@ export default function CreateListing() {
         {/* Right Side Section */}
         <div className="flex flex-col flex-1 gap-4">
           <div className="flex flex-wrap gap-6 justify-center">
+          {formData.offer && (
             <div className="flex items-center gap-2">
               <input
                 type="number"
@@ -231,6 +270,8 @@ export default function CreateListing() {
                 <span className="text-xs">(₹ / Day)</span>
               </div>
             </div>
+          )}
+          {formData.type === 'rent' && (
             <div className="flex items-center gap-2">
               <input
                 type="number"
@@ -247,6 +288,7 @@ export default function CreateListing() {
                 <span className="text-xs">(₹ refundable)</span>
               </div>
             </div>
+          )}
           </div>
 
           {/* Image Upload Section */}
