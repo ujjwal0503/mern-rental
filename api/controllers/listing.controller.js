@@ -58,35 +58,44 @@ export const getListing = async (req, res, next) => {
   }
 };
 
-//can be Wrong
 export const getListings = async (req, res, next) => {
   try {
     const limit = parseInt(req.query.limit) || 9;
     const startIndex = parseInt(req.query.startIndex) || 0;
+    
+    // Handle offer filter
     let offer = req.query.offer;
-
     if (offer === undefined || offer === 'false') {
       offer = { $in: [false, true] };
-    } else {
-      offer = offer === 'true';
     }
 
+    // Handle type (rent/sale) filter
     let type = req.query.type;
-
     if (type === undefined || type === 'all') {
       type = { $in: ['sale', 'rent'] };
     }
 
+    // Handle category filter
     let category = req.query.category;
-
     if (category === undefined || category === 'all') {
-      category = { $in: ['Tractor', 'Harvester', 'Plow', 'Seeder', 'Irrigation System', 'Other'] };
+      category = { 
+        $in: ['Tractor', 'Harvester', 'Plow', 'Seeder', 'Irrigation System', 'Other'] 
+      };
+    }
+
+    // Handle price range filters
+    let priceFilter = {};
+    if (req.query.minPrice || req.query.maxPrice) {
+      priceFilter = {
+        rentalPrice: {
+          ...(req.query.minPrice && { $gte: parseInt(req.query.minPrice) }),
+          ...(req.query.maxPrice && { $lte: parseInt(req.query.maxPrice) })
+        }
+      };
     }
 
     const searchTerm = req.query.searchTerm || '';
-
     const sort = req.query.sort || 'createdAt';
-
     const order = req.query.order || 'desc';
 
     const listings = await Listing.find({
@@ -94,6 +103,8 @@ export const getListings = async (req, res, next) => {
       offer,
       type,
       category,
+      condition,
+      ...priceFilter,
     })
       .sort({ [sort]: order })
       .limit(limit)
