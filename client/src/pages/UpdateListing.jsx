@@ -18,6 +18,7 @@ export default function UpdateListing() {
     rentalPrice: 50,
     discountPrice: 50,
     depositAmount: 500,
+    offer: false
   });
   const [imageUploadError, setImageUploadError] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -98,7 +99,7 @@ export default function UpdateListing() {
     if (e.target.id === 'offer') {
       setFormData({
         ...formData,
-        [e.target.id]: e.target.checked,
+        offer: e.target.checked,
       });
     }
 
@@ -127,10 +128,12 @@ export default function UpdateListing() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (formData.imageUrls.length < 1)
+      if (formData.imageUrls.length < 1) {
         return setError('You must upload at least one image');
-      if (+formData.regularPrice < +formData.discountPrice)
-        return setError('Discount price must be lower than regular price');
+      }
+      if (!validatePrices()) {
+        return;
+      }
       setLoading(true);
       setError(false);
       const res = await fetch(`/api/listing/update/${params.listingId}`, {
@@ -153,6 +156,16 @@ export default function UpdateListing() {
       setError(error.message);
       setLoading(false);
     }
+  };
+
+  const validatePrices = () => {
+    if (formData.offer) {
+      if (+formData.discountPrice >= +formData.rentalPrice) {
+        setError('Discount price must be lower than regular price');
+        return false;
+      }
+    }
+    return true;
   };
 
   return (

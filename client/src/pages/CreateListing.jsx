@@ -17,12 +17,12 @@ export default function CreateListing() {
     rentalPrice: 50,
     discountPrice: 50,
     depositAmount: 500,
+    offer: false,
   });
   const [imageUploadError, setImageUploadError] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
-  console.log("formData", formData);
 
   const storeImage = async (file) => {
     const formData = new FormData();
@@ -84,7 +84,7 @@ export default function CreateListing() {
     if (e.target.id === 'offer') {
       setFormData({
         ...formData,
-        [e.target.id]: e.target.checked,
+        offer: e.target.checked,
       });
     }
 
@@ -110,14 +110,15 @@ export default function CreateListing() {
     }
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (formData.imageUrls.length < 1)
+      if (formData.imageUrls.length < 1) {
         return setError('You must upload at least one image');
-      if (+formData.rentalPrice < +formData.discountPrice)
-        return setError('Discount price must be lower than regular price');
+      }
+      if (!validatePrices()) {
+        return;
+      }
       setLoading(true);
       setError(false);
       const res = await fetch('/api/listing/create', {
@@ -140,6 +141,16 @@ export default function CreateListing() {
       setError(error.message);
       setLoading(false);
     }
+  };
+
+  const validatePrices = () => {
+    if (formData.offer) {
+      if (+formData.discountPrice >= +formData.rentalPrice) {
+        setError('Discount price must be lower than regular price');
+        return false;
+      }
+    }
+    return true;
   };
 
   return (
