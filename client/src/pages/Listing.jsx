@@ -49,10 +49,10 @@ export default function Listing() {
       {listing && !loading && !error && (
         <div>
           <div className="max-w-6xl mx-auto relative group">
-            <Swiper 
+            <Swiper
               navigation={{
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
               }}
               className="swiper-improved"
             >
@@ -101,40 +101,40 @@ export default function Listing() {
               {listing.location}
             </p>
             <div className="flex gap-4">
-                <div className="flex flex-col gap-2">
-                  <p className="bg-red-700 w-full max-w-[200px] text-white text-center p-1 rounded-md">
-                    {listing.type === "rent" ? "For Rent" : "For Sale"}
-                  </p>
-                </div>
+              <div className="flex flex-col gap-2">
+                <p className="bg-red-700 w-full max-w-[200px] text-white text-center p-1 rounded-md">
+                  {listing.type === "rent" ? "For Rent" : "For Sale"}
+                </p>
+              </div>
 
-                {listing.discountPrice &&
-                  listing.discountPrice < listing.rentalPrice && (
-                    <div className="flex flex-col gap-2">
-                      <p className="bg-green-700 w-full max-w-[200px] text-white text-center p-1 rounded-md">
-                        Special Offer!
-                      </p>
-                      <div className="text-sm">
-                        <p className="text-gray-500 line-through">
-                          Regular price: ₹
-                          {listing.rentalPrice.toLocaleString("en-US")}
-                          {listing.type === "rent" ? "/day" : ""}
-                        </p>
-                        <p className="text-green-700 font-semibold">
-                          Discounted price: ₹
-                          {listing.discountPrice.toLocaleString("en-US")}
-                          {listing.type === "rent" ? "/day" : ""}
-                        </p>
-                        <p className="text-green-700">
-                          Save ₹
-                          {(
-                            listing.rentalPrice - listing.discountPrice
-                          ).toLocaleString("en-US")}
-                          {listing.type === "rent" ? "/day" : ""}
-                        </p>
-                      </div>
-                    </div>
-                  )}
+              {listing.offer && (
+                <div className="flex flex-col gap-2">
+                  <p className="bg-green-700 w-full max-w-[200px] text-white text-center p-1 rounded-md">
+                    Special Offer!
+                  </p>
+                  <div className="text-sm">
+                    <p className="text-gray-500 line-through">
+                      Regular price: ₹
+                      {listing.rentalPrice.toLocaleString("en-US")}
+                      {listing.type === "rent" ? "/day" : ""}
+                    </p>
+                    <p className="text-green-700 font-semibold">
+                      Discounted price: ₹
+                      {listing.discountPrice.toLocaleString("en-US")}
+                      {listing.type === "rent" ? "/day" : ""}
+                    </p>
+                    <p className="text-green-700">
+                      Save ₹
+                      {(
+                        listing.rentalPrice - listing.discountPrice
+                      ).toLocaleString("en-US")}
+                      {listing.type === "rent" ? "/day" : ""}
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
+
             <p className="text-slate-800">
               <span className="font-semibold text-black">Description - </span>
               {listing.description}
@@ -156,11 +156,14 @@ export default function Listing() {
               )}
             </ul>
             {currentUser && listing.userRef !== currentUser._id && !contact && (
-              <button onClick={()=>setContact(true)} className='bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 p-3'>
+              <button
+                onClick={() => setContact(true)}
+                className="bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 p-3"
+              >
                 Contact landlord
               </button>
             )}
-            {contact && <Contact listing={listing}/>}
+            {contact && <Contact listing={listing} />}
           </div>
         </div>
       )}

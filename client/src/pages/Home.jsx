@@ -64,7 +64,7 @@ export default function Home() {
             Rent or Buy 
             <span className='text-green-600'> Farm Equipment</span>
             <br className='hidden sm:block'/> With 
-            <span className='text-green-600'> Farm</span>
+            <span className='text-green-500'> Farm</span>
             <span className='text-slate-800'>Tech</span>
           </h1>
           
