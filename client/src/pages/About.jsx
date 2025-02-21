@@ -37,7 +37,7 @@ export default function About() {
       {/* Call to action */}
       <div className="mt-10">
         <a 
-          href="/" 
+          href="/search" 
           className="px-6 py-3 bg-green-600 text-white font-bold text-lg rounded-full shadow-md hover:bg-green-700 transition"
         >
           Explore Equipment
