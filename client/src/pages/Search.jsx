@@ -240,7 +240,7 @@ export default function Search() {
             </select>
           </div>
 
-          <button className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95">
+          <button className="bg-green-500 text-white p-3 rounded-lg uppercase hover:opacity-95">
             Search
           </button>
         </form>
@@ -251,10 +251,10 @@ export default function Search() {
         </h1>
         <div className="p-7 flex flex-wrap gap-4">
           {!loading && listings.length === 0 && (
-            <p className="text-xl text-slate-700">No listing found!</p>
+            <p className="text-xl text-green-700">No listing found!</p>
           )}
           {loading && (
-            <p className="text-xl text-slate-700 text-center w-full">
+            <p className="text-xl text-green-700 text-center w-full">
               Loading...
             </p>
           )}

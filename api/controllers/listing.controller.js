@@ -93,7 +93,7 @@ export const getListings = async (req, res, next) => {
 
     // Add offer filter
     if (req.query.offer === 'true') {
-      searchFilters.discountPrice = { $exists: true, $gt: 0 };
+      searchFilters.offer = true;  // Only show listings where offer is true
     }
 
     // Determine sort options
