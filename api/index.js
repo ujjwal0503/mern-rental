@@ -7,6 +7,7 @@ import listingRouter from './routes/listing.route.js';
 import cookieParser from 'cookie-parser';
 import uploadRouter from './routes/upload.route.js';
 import { v2 as cloudinary } from 'cloudinary';
+import path from 'path';
 
 dotenv.config();
 
@@ -25,6 +26,8 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
+
+  const __dirname = path.resolve();
 
 const app = express();
 
@@ -45,7 +48,13 @@ app.use('/api/user', userRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/listing', listingRouter);
 
-// Error handling middleware
+app.use(express.static(path.join(__dirname, '/client/dist')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+})
+
+
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
   const message = err.message || 'Internal Server Error';
