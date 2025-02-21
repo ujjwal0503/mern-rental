@@ -115,7 +115,6 @@ export const getListings = async (req, res, next) => {
 
     return res.status(200).json(listings);
   } catch (error) {
-    console.error('Error in getListings:', error);
     next(error);
   }
 };

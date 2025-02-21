@@ -13,14 +13,11 @@ cloudinary.config({
 export const uploadToCloudinary = async (file) => {
   try {
     if (!file) throw new Error('No file provided');
-    console.log('Uploading file:', file.path); // Debug log
     
     const result = await cloudinary.uploader.upload(file.path);
-    console.log('Upload result:', result); // Debug log
     
     return result.secure_url;
   } catch (error) {
-    console.error('Cloudinary upload error:', error); // Debug log
     throw new Error('Error uploading to Cloudinary: ' + error.message);
   }
 };
