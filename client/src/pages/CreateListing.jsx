@@ -247,7 +247,7 @@ export default function CreateListing() {
                 type="number"
                 id="rentalPrice"
                 min="50"
-                max="10000"
+                max="100000"
                 required
                 className="p-3 border border-gray-300 rounded-lg"
                 onChange={handleChange}
@@ -269,8 +269,8 @@ export default function CreateListing() {
               <input
                 type="number"
                 id="discountPrice"
-                min="50"
-                max="10000"
+                min="0"
+                max="100000"
                 required
                 className="p-3 border border-gray-300 rounded-lg"
                 onChange={handleChange}

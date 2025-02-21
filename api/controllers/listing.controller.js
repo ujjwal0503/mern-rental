@@ -58,60 +58,64 @@ export const getListing = async (req, res, next) => {
   }
 };
 
+// Listing.Controller.js
 export const getListings = async (req, res, next) => {
   try {
     const limit = parseInt(req.query.limit) || 9;
     const startIndex = parseInt(req.query.startIndex) || 0;
-    
-    // Handle offer filter
-    let offer = req.query.offer;
-    if (offer === undefined || offer === 'false') {
-      offer = { $in: [false, true] };
+
+    // Build search filters
+    const searchFilters = {};
+
+    // Add text search if searchTerm exists
+    if (req.query.searchTerm) {
+      searchFilters.$or = [
+        { name: { $regex: req.query.searchTerm, $options: 'i' } },
+        { description: { $regex: req.query.searchTerm, $options: 'i' } },
+        { location: { $regex: req.query.searchTerm, $options: 'i' } }
+      ];
     }
 
-    // Handle type (rent/sale) filter
-    let type = req.query.type;
-    if (type === undefined || type === 'all') {
-      type = { $in: ['sale', 'rent'] };
+    // Add type filter
+    if (req.query.type && req.query.type !== 'all') {
+      searchFilters.type = req.query.type;
     }
 
-    // Handle category filter
-    let category = req.query.category;
-    if (category === undefined || category === 'all') {
-      category = { 
-        $in: ['Tractor', 'Harvester', 'Plow', 'Seeder', 'Irrigation System', 'Other'] 
-      };
+    // Add category filter
+    if (req.query.category && req.query.category !== '') {
+      searchFilters.category = req.query.category;
     }
 
-    // Handle price range filters
-    let priceFilter = {};
-    if (req.query.minPrice || req.query.maxPrice) {
-      priceFilter = {
-        rentalPrice: {
-          ...(req.query.minPrice && { $gte: parseInt(req.query.minPrice) }),
-          ...(req.query.maxPrice && { $lte: parseInt(req.query.maxPrice) })
-        }
-      };
+    // Add condition filter
+    if (req.query.condition && req.query.condition !== '') {
+      searchFilters.condition = req.query.condition;
     }
 
-    const searchTerm = req.query.searchTerm || '';
-    const sort = req.query.sort || 'createdAt';
-    const order = req.query.order || 'desc';
+    // Add offer filter
+    if (req.query.offer === 'true') {
+      searchFilters.discountPrice = { $exists: true, $gt: 0 };
+    }
 
-    const listings = await Listing.find({
-      name: { $regex: searchTerm, $options: 'i' },
-      offer,
-      type,
-      category,
-      condition,
-      ...priceFilter,
-    })
-      .sort({ [sort]: order })
+    // Determine sort options
+    let sortOptions = {};
+    if (req.query.sort) {
+      const sortField = req.query.sort === 'createdAt' ? 'createdAt' : 'rentalPrice';
+      const sortOrder = req.query.order === 'desc' ? -1 : 1;
+      sortOptions[sortField] = sortOrder;
+    } else {
+      sortOptions = { createdAt: -1 };
+    }
+
+    // Execute query
+    const listings = await Listing.find(searchFilters)
+      .sort(sortOptions)
       .limit(limit)
       .skip(startIndex);
 
+
     return res.status(200).json(listings);
   } catch (error) {
+    console.error('Error in getListings:', error);
     next(error);
   }
 };

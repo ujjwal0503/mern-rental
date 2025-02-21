@@ -31,7 +31,6 @@ export default function UpdateListing() {
       const res = await fetch(`/api/listing/get/${listingId}`);
       const data = await res.json();
       if (data.success === false) {
-        console.log(data.message);
         return;
       }
       setFormData(data);
@@ -171,7 +170,7 @@ export default function UpdateListing() {
   return (
     <main className="p-3 max-w-4xl mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">
-        Update Equipment Information
+        Update Agricultural Equipment Information
       </h1>
       <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
         <div className="flex flex-col gap-4 flex-1">
@@ -262,7 +261,7 @@ export default function UpdateListing() {
                 type="number"
                 id="rentalPrice"
                 min="50"
-                max="10000"
+                max="100000"
                 required
                 className="p-3 border border-gray-300 rounded-lg"
                 onChange={handleChange}
@@ -284,8 +283,8 @@ export default function UpdateListing() {
               <input
                 type="number"
                 id="discountPrice"
-                min="50"
-                max="10000"
+                min="0"
+                max="100000"
                 required
                 className="p-3 border border-gray-300 rounded-lg"
                 onChange={handleChange}
@@ -297,7 +296,7 @@ export default function UpdateListing() {
               </div>
             </div>
           )}
-            {formData.type === 'rent' && (
+          {formData.type === 'rent' && (
             <div className="flex items-center gap-2">
               <input
                 type="number"

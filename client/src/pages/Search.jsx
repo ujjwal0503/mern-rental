@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ListingItem from '../components/ListingItem';
 
 export default function Search() {
   const navigate = useNavigate();
   const [sidebardata, setSidebardata] = useState({
     searchTerm: '',
     type: 'all',
-    category: 'all',
+    category: '',
+    condition: '',
     offer: false,
     sort: 'created_at',
     order: 'desc',
@@ -20,6 +22,7 @@ export default function Search() {
     const searchTermFromUrl = urlParams.get('searchTerm');
     const typeFromUrl = urlParams.get('type');
     const categoryFromUrl = urlParams.get('category');
+    const conditionFromUrl = urlParams.get('condition');
     const offerFromUrl = urlParams.get('offer');
     const sortFromUrl = urlParams.get('sort');
     const orderFromUrl = urlParams.get('order');
@@ -28,6 +31,7 @@ export default function Search() {
       searchTermFromUrl ||
       typeFromUrl ||
       categoryFromUrl ||
+      conditionFromUrl ||
       offerFromUrl ||
       sortFromUrl ||
       orderFromUrl
@@ -35,31 +39,33 @@ export default function Search() {
       setSidebardata({
         searchTerm: searchTermFromUrl || '',
         type: typeFromUrl || 'all',
-        category: categoryFromUrl || 'all',
-        offer: offerFromUrl === 'true' ? true : false,
+        category: categoryFromUrl || '',
+        condition: conditionFromUrl || '',
+        offer: offerFromUrl === 'true',
         sort: sortFromUrl || 'created_at',
         order: orderFromUrl || 'desc',
       });
     }
 
     const fetchListings = async () => {
-      setLoading(true);
-      const searchQuery = urlParams.toString();
-      const res = await fetch(`/api/listing/get?${searchQuery}`);
-      const data = await res.json();
-      setListings(data);
-      setLoading(false);
+      try {
+        setLoading(true);
+        const searchQuery = urlParams.toString();
+        const res = await fetch(`/api/listing/get?${searchQuery}`);
+        const data = await res.json();
+        setListings(data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching listings:', error);
+        setLoading(false);
+      }
     };
 
     fetchListings();
   }, [location.search]);
 
   const handleChange = (e) => {
-    if (
-      e.target.id === 'all' ||
-      e.target.id === 'rent' ||
-      e.target.id === 'sale'
-    ) {
+    if (e.target.id === 'all' || e.target.id === 'rent' || e.target.id === 'sale') {
       setSidebardata({ ...sidebardata, type: e.target.id });
     }
 
@@ -70,12 +76,15 @@ export default function Search() {
     if (e.target.id === 'offer') {
       setSidebardata({
         ...sidebardata,
-        [e.target.id]: e.target.checked || e.target.checked === 'true' ? true : false,
+        offer: e.target.checked,
       });
     }
 
-    if (e.target.id === 'category') {
-      setSidebardata({ ...sidebardata, category: e.target.value });
+    if (e.target.id === 'category' || e.target.id === 'condition') {
+      setSidebardata({
+        ...sidebardata,
+        [e.target.id]: e.target.value,
+      });
     }
 
     if (e.target.id === 'sort_order') {
@@ -91,7 +100,8 @@ export default function Search() {
     urlParams.set('searchTerm', sidebardata.searchTerm);
     urlParams.set('type', sidebardata.type);
     urlParams.set('category', sidebardata.category);
-    urlParams.set('offer', sidebardata.offer);
+    urlParams.set('condition', sidebardata.condition);
+    urlParams.set('offer', sidebardata.offer.toString());
     urlParams.set('sort', sidebardata.sort);
     urlParams.set('order', sidebardata.order);
     const searchQuery = urlParams.toString();
@@ -103,9 +113,7 @@ export default function Search() {
       <div className='p-7 border-b-2 md:border-r-2 md:min-h-screen'>
         <form onSubmit={handleSubmit} className='flex flex-col gap-8'>
           <div className='flex items-center gap-2'>
-            <label className='whitespace-nowrap font-semibold'>
-              Search Term:
-            </label>
+            <label className='whitespace-nowrap font-semibold'>Search Term:</label>
             <input
               type='text'
               id='searchTerm'
@@ -115,6 +123,7 @@ export default function Search() {
               onChange={handleChange}
             />
           </div>
+
           <div className='flex gap-2 flex-wrap items-center'>
             <label className='font-semibold'>Type:</label>
             <div className='flex gap-2'>
@@ -158,15 +167,16 @@ export default function Search() {
               <span>Offer</span>
             </div>
           </div>
+
           <div className='flex items-center gap-2'>
             <label className='font-semibold'>Category:</label>
             <select
               id='category'
-              className='border rounded-lg p-3 w-full'
-              value={sidebardata.category}
+              className='border rounded-lg p-3'
               onChange={handleChange}
+              value={sidebardata.category}
             >
-              <option value='all'>All Categories</option>
+              <option value=''>All Categories</option>
               <option value='Tractor'>Tractor</option>
               <option value='Harvester'>Harvester</option>
               <option value='Plow'>Plow</option>
@@ -175,6 +185,23 @@ export default function Search() {
               <option value='Other'>Other</option>
             </select>
           </div>
+
+          <div className='flex items-center gap-2'>
+            <label className='font-semibold'>Condition:</label>
+            <select
+              id='condition'
+              className='border rounded-lg p-3'
+              onChange={handleChange}
+              value={sidebardata.condition}
+            >
+              <option value=''>Any Condition</option>
+              <option value='New'>New</option>
+              <option value='Good'>Good</option>
+              <option value='Average'>Average</option>
+              <option value='Needs Repair'>Needs Repair</option>
+            </select>
+          </div>
+
           <div className='flex items-center gap-2'>
             <label className='font-semibold'>Sort:</label>
             <select
@@ -189,16 +216,34 @@ export default function Search() {
               <option value='createdAt_asc'>Oldest</option>
             </select>
           </div>
+
           <button className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95'>
             Search
           </button>
         </form>
       </div>
-      <div className=''>
+      <div className='flex-1'>
         <h1 className='text-3xl font-semibold border-b p-3 text-slate-700 mt-5'>
           Listing results:
         </h1>
+        <div className='p-7 flex flex-wrap gap-4'>
+          {!loading && listings.length === 0 && (
+            <p className='text-xl text-slate-700'>No listing found!</p>
+          )}
+          {loading && (
+            <p className='text-xl text-slate-700 text-center w-full'>
+              Loading...
+            </p>
+          )}
+
+          {!loading &&
+            listings &&
+            listings.map((listing) => (
+              <ListingItem key={listing._id} listing={listing} />
+            ))}
+        </div>
       </div>
     </div>
   );
 }
+
