@@ -16,6 +16,7 @@ export default function Search() {
 
   const [loading, setLoading] = useState(false);
   const [listings, setListings] = useState([]);
+  const [showMore, setShowMore] = useState(false);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -50,9 +51,15 @@ export default function Search() {
     const fetchListings = async () => {
       try {
         setLoading(true);
+        setShowMore(false);
         const searchQuery = urlParams.toString();
         const res = await fetch(`/api/listing/get?${searchQuery}`);
         const data = await res.json();
+        if (data.length > 8) {
+          setShowMore(true);
+        } else {
+          setShowMore(false);
+        }
         setListings(data);
         setLoading(false);
       } catch (error) {
@@ -108,59 +115,75 @@ export default function Search() {
     navigate(`/search?${searchQuery}`);
   };
 
+  const onShowMoreClick = async () => {
+    const numberOfListings = listings.length;
+    const startIndex = numberOfListings;
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set('startIndex', startIndex);
+    const searchQuery = urlParams.toString();
+    const res = await fetch(`/api/listing/get?${searchQuery}`);
+    const data = await res.json();
+    if (data.length < 9) {
+      setShowMore(false);
+    }
+    setListings([...listings, ...data]);
+  };
+
   return (
-    <div className='flex flex-col md:flex-row'>
-      <div className='p-7 border-b-2 md:border-r-2 md:min-h-screen'>
-        <form onSubmit={handleSubmit} className='flex flex-col gap-8'>
-          <div className='flex items-center gap-2'>
-            <label className='whitespace-nowrap font-semibold'>Search Term:</label>
+    <div className="flex flex-col md:flex-row">
+      <div className="p-7 border-b-2 md:border-r-2 md:min-h-screen">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+          <div className="flex items-center gap-2">
+            <label className="whitespace-nowrap font-semibold">
+              Search Term:
+            </label>
             <input
-              type='text'
-              id='searchTerm'
-              placeholder='Search...'
-              className='border rounded-lg p-3 w-full'
+              type="text"
+              id="searchTerm"
+              placeholder="Search..."
+              className="border rounded-lg p-3 w-full"
               value={sidebardata.searchTerm}
               onChange={handleChange}
             />
           </div>
 
-          <div className='flex gap-2 flex-wrap items-center'>
-            <label className='font-semibold'>Type:</label>
-            <div className='flex gap-2'>
+          <div className="flex gap-2 flex-wrap items-center">
+            <label className="font-semibold">Type:</label>
+            <div className="flex gap-2">
               <input
-                type='checkbox'
-                id='all'
-                className='w-5'
+                type="checkbox"
+                id="all"
+                className="w-5"
                 onChange={handleChange}
-                checked={sidebardata.type === 'all'}
+                checked={sidebardata.type === "all"}
               />
               <span>Rent & Sale</span>
             </div>
-            <div className='flex gap-2'>
+            <div className="flex gap-2">
               <input
-                type='checkbox'
-                id='rent'
-                className='w-5'
+                type="checkbox"
+                id="rent"
+                className="w-5"
                 onChange={handleChange}
-                checked={sidebardata.type === 'rent'}
+                checked={sidebardata.type === "rent"}
               />
               <span>Rent</span>
             </div>
-            <div className='flex gap-2'>
+            <div className="flex gap-2">
               <input
-                type='checkbox'
-                id='sale'
-                className='w-5'
+                type="checkbox"
+                id="sale"
+                className="w-5"
                 onChange={handleChange}
-                checked={sidebardata.type === 'sale'}
+                checked={sidebardata.type === "sale"}
               />
               <span>Sale</span>
             </div>
-            <div className='flex gap-2'>
+            <div className="flex gap-2">
               <input
-                type='checkbox'
-                id='offer'
-                className='w-5'
+                type="checkbox"
+                id="offer"
+                className="w-5"
                 onChange={handleChange}
                 checked={sidebardata.offer}
               />
@@ -168,70 +191,70 @@ export default function Search() {
             </div>
           </div>
 
-          <div className='flex items-center gap-2'>
-            <label className='font-semibold'>Category:</label>
+          <div className="flex items-center gap-2">
+            <label className="font-semibold">Category:</label>
             <select
-              id='category'
-              className='border rounded-lg p-3'
+              id="category"
+              className="border rounded-lg p-3"
               onChange={handleChange}
               value={sidebardata.category}
             >
-              <option value=''>All Categories</option>
-              <option value='Tractor'>Tractor</option>
-              <option value='Harvester'>Harvester</option>
-              <option value='Plow'>Plow</option>
-              <option value='Seeder'>Seeder</option>
-              <option value='Irrigation System'>Irrigation System</option>
-              <option value='Other'>Other</option>
+              <option value="">All Categories</option>
+              <option value="Tractor">Tractor</option>
+              <option value="Harvester">Harvester</option>
+              <option value="Plow">Plow</option>
+              <option value="Seeder">Seeder</option>
+              <option value="Irrigation System">Irrigation System</option>
+              <option value="Other">Other</option>
             </select>
           </div>
 
-          <div className='flex items-center gap-2'>
-            <label className='font-semibold'>Condition:</label>
+          <div className="flex items-center gap-2">
+            <label className="font-semibold">Condition:</label>
             <select
-              id='condition'
-              className='border rounded-lg p-3'
+              id="condition"
+              className="border rounded-lg p-3"
               onChange={handleChange}
               value={sidebardata.condition}
             >
-              <option value=''>Any Condition</option>
-              <option value='New'>New</option>
-              <option value='Good'>Good</option>
-              <option value='Average'>Average</option>
-              <option value='Needs Repair'>Needs Repair</option>
+              <option value="">Any Condition</option>
+              <option value="New">New</option>
+              <option value="Good">Good</option>
+              <option value="Average">Average</option>
+              <option value="Needs Repair">Needs Repair</option>
             </select>
           </div>
 
-          <div className='flex items-center gap-2'>
-            <label className='font-semibold'>Sort:</label>
+          <div className="flex items-center gap-2">
+            <label className="font-semibold">Sort:</label>
             <select
               onChange={handleChange}
-              defaultValue={'created_at_desc'}
-              id='sort_order'
-              className='border rounded-lg p-3'
+              defaultValue={"created_at_desc"}
+              id="sort_order"
+              className="border rounded-lg p-3"
             >
-              <option value='rentalPrice_desc'>Price high to low</option>
-              <option value='rentalPrice_asc'>Price low to high</option>
-              <option value='createdAt_desc'>Latest</option>
-              <option value='createdAt_asc'>Oldest</option>
+              <option value="rentalPrice_desc">Price high to low</option>
+              <option value="rentalPrice_asc">Price low to high</option>
+              <option value="createdAt_desc">Latest</option>
+              <option value="createdAt_asc">Oldest</option>
             </select>
           </div>
 
-          <button className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95'>
+          <button className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95">
             Search
           </button>
         </form>
       </div>
-      <div className='flex-1'>
-        <h1 className='text-3xl font-semibold border-b p-3 text-slate-700 mt-5'>
+      <div className="flex-1">
+        <h1 className="text-3xl font-semibold border-b p-3 text-slate-700 mt-5">
           Listing results:
         </h1>
-        <div className='p-7 flex flex-wrap gap-4'>
+        <div className="p-7 flex flex-wrap gap-4">
           {!loading && listings.length === 0 && (
-            <p className='text-xl text-slate-700'>No listing found!</p>
+            <p className="text-xl text-slate-700">No listing found!</p>
           )}
           {loading && (
-            <p className='text-xl text-slate-700 text-center w-full'>
+            <p className="text-xl text-slate-700 text-center w-full">
               Loading...
             </p>
           )}
@@ -241,6 +264,15 @@ export default function Search() {
             listings.map((listing) => (
               <ListingItem key={listing._id} listing={listing} />
             ))}
+
+          {showMore && (
+            <button
+              onClick={onShowMoreClick}
+              className="text-green-700 hover:underline p-7 text-center w-full"
+            >
+              Show more
+            </button>
+          )}
         </div>
       </div>
     </div>
