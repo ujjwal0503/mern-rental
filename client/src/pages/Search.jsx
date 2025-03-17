@@ -130,72 +130,81 @@ export default function Search() {
   };
 
   return (
-    <div className="flex flex-col md:flex-row">
-      <div className="p-7 border-b-2 md:border-r-2 md:min-h-screen">
-        <form onSubmit={handleSubmit} className="flex flex-col gap-8">
-          <div className="flex items-center gap-2">
-            <label className="whitespace-nowrap font-semibold">
-              Search Term:
+    <div className="flex flex-col md:flex-row bg-gray-50">
+      {/* Sidebar Filter */}
+      <div className="md:w-80 lg:w-96 p-6 bg-white shadow-md md:min-h-screen">
+        <h2 className="text-2xl font-bold text-green-700 mb-6">Filter Options</h2>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+          <div className="flex flex-col gap-2">
+            <label className="font-medium text-gray-700">
+              Search Term
             </label>
-            <input
-              type="text"
-              id="searchTerm"
-              placeholder="Search..."
-              className="border rounded-lg p-3 w-full"
-              value={sidebardata.searchTerm}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="flex gap-2 flex-wrap items-center">
-            <label className="font-semibold">Type:</label>
-            <div className="flex gap-2">
+            <div className="relative">
               <input
-                type="checkbox"
-                id="all"
-                className="w-5"
+                type="text"
+                id="searchTerm"
+                placeholder="Search equipment..."
+                className="border border-gray-300 rounded-lg p-3 w-full focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                value={sidebardata.searchTerm}
                 onChange={handleChange}
-                checked={sidebardata.type === "all"}
               />
-              <span>Rent & Sale</span>
-            </div>
-            <div className="flex gap-2">
-              <input
-                type="checkbox"
-                id="rent"
-                className="w-5"
-                onChange={handleChange}
-                checked={sidebardata.type === "rent"}
-              />
-              <span>Rent</span>
-            </div>
-            <div className="flex gap-2">
-              <input
-                type="checkbox"
-                id="sale"
-                className="w-5"
-                onChange={handleChange}
-                checked={sidebardata.type === "sale"}
-              />
-              <span>Sale</span>
-            </div>
-            <div className="flex gap-2">
-              <input
-                type="checkbox"
-                id="offer"
-                className="w-5"
-                onChange={handleChange}
-                checked={sidebardata.offer}
-              />
-              <span>Offer</span>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <label className="font-semibold">Category:</label>
+          <div className="flex flex-col gap-2">
+            <label className="font-medium text-gray-700">Type</label>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="flex items-center gap-2 bg-gray-50 p-2 rounded-md">
+                <input
+                  type="checkbox"
+                  id="all"
+                  className="w-5 h-5 accent-green-600"
+                  onChange={handleChange}
+                  checked={sidebardata.type === "all"}
+                />
+                <span className="text-gray-700">Rent & Sale</span>
+              </div>
+              <div className="flex items-center gap-2 bg-gray-50 p-2 rounded-md">
+                <input
+                  type="checkbox"
+                  id="rent"
+                  className="w-5 h-5 accent-green-600"
+                  onChange={handleChange}
+                  checked={sidebardata.type === "rent"}
+                />
+                <span className="text-gray-700">Rent</span>
+              </div>
+              <div className="flex items-center gap-2 bg-gray-50 p-2 rounded-md">
+                <input
+                  type="checkbox"
+                  id="sale"
+                  className="w-5 h-5 accent-green-600"
+                  onChange={handleChange}
+                  checked={sidebardata.type === "sale"}
+                />
+                <span className="text-gray-700">Sale</span>
+              </div>
+              <div className="flex items-center gap-2 bg-gray-50 p-2 rounded-md">
+                <input
+                  type="checkbox"
+                  id="offer"
+                  className="w-5 h-5 accent-green-600"
+                  onChange={handleChange}
+                  checked={sidebardata.offer}
+                />
+                <span className="text-gray-700">Offer</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="font-medium text-gray-700">Category</label>
             <select
               id="category"
-              className="border rounded-lg p-3"
+              className="border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white"
               onChange={handleChange}
               value={sidebardata.category}
             >
@@ -209,11 +218,11 @@ export default function Search() {
             </select>
           </div>
 
-          <div className="flex items-center gap-2">
-            <label className="font-semibold">Condition:</label>
+          <div className="flex flex-col gap-2">
+            <label className="font-medium text-gray-700">Condition</label>
             <select
               id="condition"
-              className="border rounded-lg p-3"
+              className="border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white"
               onChange={handleChange}
               value={sidebardata.condition}
             >
@@ -225,13 +234,13 @@ export default function Search() {
             </select>
           </div>
 
-          <div className="flex items-center gap-2">
-            <label className="font-semibold">Sort:</label>
+          <div className="flex flex-col gap-2">
+            <label className="font-medium text-gray-700">Sort By</label>
             <select
               onChange={handleChange}
               defaultValue={"created_at_desc"}
               id="sort_order"
-              className="border rounded-lg p-3"
+              className="border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white"
             >
               <option value="rentalPrice_desc">Price high to low</option>
               <option value="rentalPrice_asc">Price low to high</option>
@@ -240,42 +249,74 @@ export default function Search() {
             </select>
           </div>
 
-          <button className="bg-green-500 text-white p-3 rounded-lg uppercase hover:opacity-95">
-            Search
+          <button className="bg-green-600 text-white p-3 rounded-lg font-medium hover:bg-green-700 transition-colors mt-4 flex items-center justify-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            Apply Filters
           </button>
         </form>
       </div>
+      
+      {/* Results Area */}
       <div className="flex-1">
-        <h1 className="text-3xl font-semibold border-b p-3 text-slate-700 mt-5">
-          Listing results:
-        </h1>
-        <div className="p-7 flex flex-wrap gap-4">
-          {!loading && listings.length === 0 && (
-            <p className="text-xl text-green-700">No listing found!</p>
-          )}
-          {loading && (
-            <p className="text-xl text-green-700 text-center w-full">
-              Loading...
-            </p>
-          )}
-
-          {!loading &&
-            listings &&
-            listings.map((listing) => (
-              <ListingItem key={listing._id} listing={listing} />
-            ))}
-
-          {showMore && (
-            <button
-              onClick={onShowMoreClick}
-              className="text-green-700 hover:underline p-7 text-center w-full"
-            >
-              Show more
-            </button>
-          )}
+        <div className="bg-white shadow-sm p-6 mb-4">
+          <h1 className="text-3xl font-bold text-gray-800">
+            Search Results
+            {!loading && listings.length > 0 && (
+              <span className="text-lg font-normal text-gray-500 ml-2">
+                ({listings.length} items found)
+              </span>
+            )}
+          </h1>
         </div>
+        
+        {/* Loading State */}
+        {loading && (
+          <div className="flex justify-center items-center p-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500"></div>
+          </div>
+        )}
+        
+        {/* No Results */}
+        {!loading && listings.length === 0 && (
+          <div className="flex flex-col items-center justify-center p-12 text-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p className="text-xl text-gray-600 font-medium">No listings found!</p>
+            <p className="text-gray-500 mt-2">Try adjusting your search filters</p>
+          </div>
+        )}
+        
+        {/* Results Grid */}
+        {!loading && listings.length > 0 && (
+          <div className="p-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8">
+              {listings.map((listing) => (
+                <div key={listing._id} className="flex justify-center">
+                  <ListingItem listing={listing} />
+                </div>
+              ))}
+            </div>
+            
+            {/* Show More Button */}
+            {showMore && (
+              <div className="mt-8 flex justify-center">
+                <button
+                  onClick={onShowMoreClick}
+                  className="flex items-center gap-2 text-green-700 hover:text-green-800 font-medium bg-green-50 hover:bg-green-100 px-6 py-3 rounded-lg transition-colors"
+                >
+                  Load More
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
 }
-

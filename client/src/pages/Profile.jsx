@@ -61,6 +61,7 @@ export default function Profile() {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -117,6 +118,9 @@ export default function Profile() {
   };
 
   const handleShowListings = async () => {
+    // Immediately clear any update success message
+    setUpdateSuccess(false);
+    
     try {
       setShowListingsError(false);
       const res = await fetch(`/api/user/listings/${currentUser._id}`);
@@ -150,130 +154,185 @@ export default function Profile() {
   };
 
   return (
-    <div className='p-3 max-w-lg mx-auto'>
-      <h1 className='text-3xl font-semibold text-center my-7'>Profile</h1>
-      <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
-        <input
-          onChange={(e) => setFile(e.target.files[0])}
-          type='file'
-          ref={fileRef}
-          hidden
-          accept='image/*'
-        />
-        <img
-          onClick={() => fileRef.current.click()}
-          src={formData.avatar || currentUser.avatar}
-          alt='profile'
-          className='rounded-full h-24 w-24 object-cover cursor-pointer self-center mt-2'
-        />
-        <p className='text-sm self-center'>
-          {fileUploadError ? (
-            <span className='text-red-700'>
-              Error Image upload (image must be less than 2 mb)
-            </span>
-          ) : filePerc > 0 && filePerc < 100 ? (
-            <span className='text-green-500'>{`Uploading ${filePerc}%`}</span>
-          ) : filePerc === 100 ? (
-            <span className='text-green-700'>Image successfully uploaded!</span>
-          ) : (
-            ''
-          )}
-        </p>
-        <input
-          type='text'
-          placeholder='username'
-          defaultValue={currentUser.username}
-          id='username'
-          className='border p-3 rounded-lg'
-          onChange={handleChange}
-        />
-        <input
-          type='email'
-          placeholder='email'
-          id='email'
-          defaultValue={currentUser.email}
-          className='border p-3 rounded-lg'
-          onChange={handleChange}
-        />
-        <input
-          type='password'
-          placeholder='password'
-          id='password'
-          onChange={handleChange}
-          className='border p-3 rounded-lg'
-        />
-        <button
-          disabled={loading}
-          className='bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-75 disabled:opacity-55'
-        >
-          {loading ? 'Loading...' : 'Update'}
-        </button>
-        <Link className='bg-green-500 text-white p-3 rounded-lg uppercase text-center hover:opacity-75'
-         to={"/create-listing"}>
-          Create Listing
-        </Link>
-      </form>
-      <div className='flex justify-between mt-5'>
-        <span
-          onClick={handleDeleteUser}
-          className='text-red-700 cursor-pointer'
-        >
-          Delete account
-        </span>
-        <span onClick={handleSignOut} className='text-red-700 cursor-pointer'>
-          Sign out
-        </span>
-      </div>
-      <p className='text-red-700 mt-5'>{error ? error : ''}</p>
-      <p className='text-green-700 mt-5'>
-        {updateSuccess ? 'User is updated successfully!' : ''}
-      </p>
-
-      <button onClick={handleShowListings} className='text-green-700 w-full'>
-        Show Listings
-      </button>
-      <p className='text-red-700 mt-5'>
-        {showListingsError ? 'Error showing listings' : ''}
-      </p>
-      {userListings && userListings.length > 0 && (
-        <div className='flex flex-col gap-4'>
-          <h1 className='text-center mt-7 text-2xl font-semibold'>
-            Your Listings
-          </h1>
-          {userListings.map((listing) => (
-            <div
-              key={listing._id}
-              className='border rounded-lg p-3 flex justify-between items-center gap-4'
-            >
-              <Link to={`/listing/${listing._id}`}>
-                <img
-                  src={listing.imageUrls[0]}
-                  alt='listing cover'
-                  className='h-16 w-16 object-contain'
-                />
-              </Link>
-              <Link
-                className='text-slate-700 font-semibold  hover:underline truncate flex-1'
-                to={`/listing/${listing._id}`}
-              >
-                <p>{listing.name}</p>
-              </Link>
-  
-              <div className='flex flex-col item-center'>
-                <button
-                  onClick={() => handleListingDelete(listing._id)}
-                  className='text-red-700 uppercase'
-                >
-                  Delete
-                </button>
-                <Link to={`/update-listing/${listing._id}`}>
-                  <button className='text-green-700 uppercase'>Edit</button>
-                </Link>
+    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md mx-auto bg-white rounded-xl shadow-lg p-8">
+        <h1 className="text-3xl font-extrabold text-center text-gray-900 mb-8">Your Profile</h1>
+        
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="flex flex-col items-center">
+            <input
+              onChange={(e) => setFile(e.target.files[0])}
+              type="file"
+              ref={fileRef}
+              hidden
+              accept="image/*"
+            />
+            <div className="relative group">
+              <img
+                onClick={() => fileRef.current.click()}
+                src={formData.avatar || currentUser.avatar}
+                alt="profile"
+                className="h-28 w-28 rounded-full object-cover cursor-pointer ring-4 ring-gray-100 transition duration-200 hover:ring-green-200"
+              />
+              <div className="absolute inset-0 rounded-full bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity cursor-pointer" onClick={() => fileRef.current.click()}>
+                <span className="text-white text-sm font-medium">Change</span>
               </div>
             </div>
-          ))}
+            
+            {fileUploadError ? (
+              <p className="mt-2 text-sm text-red-600">
+                Error uploading image (must be less than 2MB)
+              </p>
+            ) : filePerc > 0 && filePerc < 100 ? (
+              <p className="mt-2 text-sm text-green-600">
+                Uploading: {filePerc}%
+              </p>
+            ) : filePerc === 100 ? (
+              <p className="mt-2 text-sm text-green-600">
+                Image successfully uploaded!
+              </p>
+            ) : null}
+          </div>
+
+          <div className="space-y-4">
+            <div>
+              <input
+                type="text"
+                placeholder="Username"
+                defaultValue={currentUser.username}
+                id="username"
+                className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+                onChange={handleChange}
+              />
+            </div>
+            
+            <div>
+              <input
+                type="email"
+                placeholder="Email"
+                id="email"
+                defaultValue={currentUser.email}
+                className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+                onChange={handleChange}
+              />
+            </div>
+            
+            <div>
+              <input
+                type="password"
+                placeholder="Password"
+                id="password"
+                className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+
+          {error && (
+            <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-md">
+              <p className="text-red-700 text-sm">{error}</p>
+            </div>
+          )}
+
+          {updateSuccess && !userListings.length && (
+            <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded-md">
+              <p className="text-green-700 text-sm">Profile updated successfully!</p>
+            </div>
+          )}
+
+          <div className="space-y-3">
+            <button
+              disabled={loading}
+              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-slate-700 hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? 'Updating...' : 'Update Profile'}
+            </button>
+            
+            <Link 
+              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150 ease-in-out text-center"
+              to="/create-listing"
+              onClick={() => setUpdateSuccess(false)}
+            >
+              Create New Listing
+            </Link>
+            
+            <button 
+              type="button"
+              onClick={handleShowListings} 
+              className="group relative w-full flex justify-center py-2 px-4 border border-green-600 text-sm font-medium rounded-lg text-green-700 bg-white hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150 ease-in-out"
+            >
+              Show My Listings
+            </button>
+          </div>
+        </form>
+        
+        <div className="flex justify-between items-center mt-8 pt-5 border-t border-gray-200">
+          <button
+            onClick={handleDeleteUser}
+            className="text-red-600 hover:text-red-800 text-sm font-medium transition duration-150 ease-in-out"
+          >
+            Delete Account
+          </button>
+          <button 
+            onClick={handleSignOut} 
+            className="text-red-600 hover:text-red-800 text-sm font-medium transition duration-150 ease-in-out"
+          >
+            Sign Out
+          </button>
         </div>
-      )}
+
+        {showListingsError && (
+          <div className="mt-5 bg-red-50 border-l-4 border-red-500 p-4 rounded-md">
+            <p className="text-red-700 text-sm">Error showing listings</p>
+          </div>
+        )}
+        
+        {userListings && userListings.length > 0 && (
+          <div className="mt-10">
+            <h2 className="text-2xl font-bold text-gray-900 mb-5">Your Listings</h2>
+            <div className="space-y-4">
+              {userListings.map((listing) => (
+                <div
+                  key={listing._id}
+                  className="border border-gray-200 rounded-lg p-4 flex items-center gap-4 bg-white hover:shadow-md transition duration-150 ease-in-out"
+                >
+                  <Link to={`/listing/${listing._id}`} className="shrink-0">
+                    <img
+                      src={listing.imageUrls[0]}
+                      alt="listing cover"
+                      className="h-16 w-16 object-cover rounded-md"
+                    />
+                  </Link>
+                  
+                  <Link
+                    className="flex-1 min-w-0"
+                    to={`/listing/${listing._id}`}
+                  >
+                    <p className="text-slate-800 font-semibold truncate hover:text-green-600 transition duration-150 ease-in-out">
+                      {listing.name}
+                    </p>
+                  </Link>
+  
+                  <div className="flex gap-3">
+                    <Link 
+                      to={`/update-listing/${listing._id}`}
+                      className="text-green-600 hover:text-green-800 text-sm font-medium transition duration-150 ease-in-out py-1 px-3 rounded-md hover:bg-green-50"
+                    >
+                      Edit
+                    </Link>
+                    <button
+                      onClick={() => handleListingDelete(listing._id)}
+                      className="text-red-600 hover:text-red-800 text-sm font-medium transition duration-150 ease-in-out py-1 px-3 rounded-md hover:bg-red-50"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

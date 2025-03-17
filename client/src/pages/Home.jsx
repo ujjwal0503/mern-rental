@@ -52,23 +52,23 @@ export default function Home() {
   }, []);
   
   return (
-    <div className='min-h-screen bg-gray-50'>
-      {/* Hero Section with Lighter Gradient */}
-      <div className='relative bg-gradient-to-br from-green-50 via-green-100 to-slate-100 py-24'>
+    <div className='min-h-screen bg-white'>
+      {/* Hero Section with Clean Design */}
+      <div className='relative bg-white py-24 border-b border-gray-100'>
         <div className='relative flex flex-col gap-8 px-4 max-w-6xl mx-auto text-center'>
-          <div className='flex justify-center mb-4 animate-bounce'>
-            <FaTractor className='text-7xl text-green-600 drop-shadow-lg' />
+          <div className='flex justify-center mb-4'>
+            <FaTractor className='text-6xl text-green-600' />
           </div>
           
-          <h1 className='text-4xl md:text-6xl lg:text-7xl font-bold text-slate-800 drop-shadow-sm'>
+          <h1 className='text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900'>
             Rent or Buy 
             <span className='text-green-600'> Farm Equipment</span>
             <br className='hidden sm:block'/> With 
-            <span className='text-green-500'> Farm</span>
-            <span className='text-slate-800'>Tech</span>
+            <span className='text-green-600'> Farm</span>
+            <span className='text-gray-900'>Tech</span>
           </h1>
           
-          <div className='text-slate-600 text-sm sm:text-lg max-w-3xl mx-auto leading-relaxed'>
+          <div className='text-gray-500 text-sm sm:text-lg max-w-3xl mx-auto leading-relaxed'>
             Find top-quality agricultural equipment for rent or sale, designed to meet 
             the needs of modern farmers and agribusinesses.
             <br className='hidden sm:block'/>
@@ -78,20 +78,20 @@ export default function Home() {
           <div className='flex flex-col sm:flex-row gap-4 justify-center items-center mt-4'>
             <Link
               to={'/search'}
-              className='bg-green-600 text-white px-8 py-4 rounded-full 
+              className='bg-green-600 text-white px-8 py-4 rounded-lg 
                 hover:bg-green-700 transition-all duration-300 
                 font-semibold text-lg inline-flex items-center gap-2
-                hover:scale-105 transform hover:shadow-lg'
+                shadow-md'
             >
               <FaSearch className='text-xl' />
               Explore Equipment
             </Link>
             <Link
               to={'/about'}
-              className='bg-white/70 backdrop-blur-sm text-green-700 px-8 py-4 
-                rounded-full hover:bg-white/90 transition-all duration-300 
+              className='bg-white text-green-700 px-8 py-4 
+                rounded-lg hover:bg-gray-50 transition-all duration-300 
                 font-semibold text-lg inline-flex items-center gap-2
-                hover:scale-105 transform border border-green-100'
+                border border-gray-200 shadow-sm'
             >
               Learn More
             </Link>
@@ -99,13 +99,18 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Swiper Section */}
-      <div className='max-w-6xl mx-auto my-20 px-4'>
+      {/* Featured Slider Section */}
+      <div className='max-w-6xl mx-auto my-16 px-4'>
+        <div className='mb-8'>
+          <h2 className='text-3xl font-bold text-gray-900 mb-2'>Featured Equipment</h2>
+          <div className='h-1 w-20 bg-green-600'></div>
+        </div>
+        
         <Swiper
           navigation
           pagination={{ clickable: true }}
           autoplay={{ delay: 3000, disableOnInteraction: false }}
-          className='h-[550px] rounded-2xl overflow-hidden shadow-xl'
+          className='h-[500px] rounded-lg overflow-hidden shadow-lg'
         >
           {featuredListings?.length > 0 &&
             featuredListings.map((listing) => (
@@ -119,17 +124,17 @@ export default function Home() {
                         group-hover:scale-105 transition-transform duration-300'
                     />
                     <div className='absolute bottom-0 left-0 right-0 bg-gradient-to-t 
-                      from-black/90 via-black/60 to-transparent p-8 text-white'>
-                      <h3 className='text-3xl font-bold mb-3'>{listing.name}</h3>
-                      <p className='text-lg line-clamp-2 text-gray-200 mb-4'>
+                      from-black/80 via-black/50 to-transparent p-8 text-white'>
+                      <h3 className='text-3xl font-bold mb-2'>{listing.name}</h3>
+                      <p className='text-lg line-clamp-2 text-gray-200 mb-3'>
                         {listing.description}
                       </p>
                       <div className='flex items-center gap-4'>
-                        <span className='bg-green-600 px-4 py-2 rounded-full 
+                        <span className='bg-green-600 px-4 py-2 rounded-md 
                           text-sm font-semibold'>
                           {listing.type === 'rent' ? 'For Rent' : 'For Sale'}
                         </span>
-                        <span className='text-green-400 font-bold text-xl'>
+                        <span className='text-white font-bold text-xl'>
                           ₹{listing.rentalPrice.toLocaleString('en-IN')}
                           {listing.type === 'rent' && '/day'}
                         </span>
@@ -142,15 +147,15 @@ export default function Home() {
         </Swiper>
       </div>
 
-      {/* Listing Sections with Improved Spacing */}
-      <div className='max-w-6xl mx-auto p-4 flex flex-col gap-24 mb-20'>
+      {/* Listing Sections with Premium Design */}
+      <div className='max-w-6xl mx-auto px-4 flex flex-col gap-20 mb-20'>
         {/* Featured Equipment Section */}
         {featuredListings?.length > 0 && (
           <div>
-            <div className='flex items-center justify-between mb-10'>
+            <div className='flex items-center justify-between mb-8 border-b border-gray-100 pb-4'>
               <div className='flex items-center gap-3'>
-                <MdAgriculture className='text-4xl text-green-600' />
-                <h2 className='text-3xl font-bold text-slate-800'>
+                <MdAgriculture className='text-3xl text-green-600' />
+                <h2 className='text-2xl font-bold text-gray-900'>
                   Featured Equipment
                 </h2>
               </div>
@@ -166,7 +171,9 @@ export default function Home() {
             </div>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
               {featuredListings.map((listing) => (
-                <ListingItem listing={listing} key={listing._id} />
+                <div key={listing._id} className="flex justify-center">
+                  <ListingItem listing={listing} />
+                </div>
               ))}
             </div>
           </div>
@@ -175,10 +182,10 @@ export default function Home() {
         {/* Rental Equipment Section */}
         {rentalListings?.length > 0 && (
           <div>
-            <div className='flex items-center justify-between mb-10'>
+            <div className='flex items-center justify-between mb-8 border-b border-gray-100 pb-4'>
               <div className='flex items-center gap-3'>
-                <FaTractor className='text-4xl text-green-600' />
-                <h2 className='text-3xl font-bold text-slate-800'>
+                <FaTractor className='text-3xl text-green-600' />
+                <h2 className='text-2xl font-bold text-gray-900'>
                   Available for Rent
                 </h2>
               </div>
@@ -194,7 +201,9 @@ export default function Home() {
             </div>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
               {rentalListings.map((listing) => (
-                <ListingItem listing={listing} key={listing._id} />
+                <div key={listing._id} className="flex justify-center">
+                  <ListingItem listing={listing} />
+                </div>
               ))}
             </div>
           </div>
@@ -203,10 +212,10 @@ export default function Home() {
         {/* Sale Equipment Section */}
         {saleListings?.length > 0 && (
           <div>
-            <div className='flex items-center justify-between mb-10'>
+            <div className='flex items-center justify-between mb-8 border-b border-gray-100 pb-4'>
               <div className='flex items-center gap-3'>
-                <FaTractor className='text-4xl text-green-600' />
-                <h2 className='text-3xl font-bold text-slate-800'>
+                <FaTractor className='text-3xl text-green-600' />
+                <h2 className='text-2xl font-bold text-gray-900'>
                   Available for Sale
                 </h2>
               </div>
@@ -222,11 +231,34 @@ export default function Home() {
             </div>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
               {saleListings.map((listing) => (
-                <ListingItem listing={listing} key={listing._id} />
+                <div key={listing._id} className="flex justify-center">
+                  <ListingItem listing={listing} />
+                </div>
               ))}
             </div>
           </div>
         )}
+      </div>
+      
+      {/* Premium Footer Banner */}
+      <div className='bg-gray-50 py-16 border-t border-gray-100'>
+        <div className='max-w-6xl mx-auto px-4 flex flex-col items-center text-center'>
+          <h2 className='text-3xl font-bold text-gray-900 mb-4'>Ready to Upgrade Your Farming Equipment?</h2>
+          <p className='text-gray-500 mb-8 max-w-2xl'>
+            Browse our extensive catalog of premium farming equipment. 
+            Whether you're looking to rent or buy, we have options to suit every need and budget.
+          </p>
+          <Link
+            to={'/search'}
+            className='bg-green-600 text-white px-8 py-4 rounded-lg 
+              hover:bg-green-700 transition-all duration-300 
+              font-semibold text-lg inline-flex items-center gap-2
+              shadow-md'
+          >
+            <FaSearch className='text-xl' />
+            Start Searching
+          </Link>
+        </div>
       </div>
     </div>
   );
