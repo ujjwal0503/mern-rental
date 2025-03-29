@@ -81,7 +81,7 @@ export default function About() {
 
         {/* Call to action */}
         <div className="text-center">
-          <a href="/equipment" className="inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg text-lg transition duration-300">
+          <a href="/search" className="inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg text-lg transition duration-300">
             Explore Equipment
           </a>
           <p className="mt-4 text-gray-600">
