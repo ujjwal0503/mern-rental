@@ -15,42 +15,42 @@ const Chatbot = () => {
                "Hello! Welcome to our equipment rental service. What can I assist you with?",
                "Welcome! I'm here to help with your equipment rental needs. How can I assist you?"],
     rent: {
-      general: "To rent equipment, browse our catalog on the Search page, select the item you need, choose rental dates, and complete checkout. Need help with anything specific?",
-      process: "Our rental process is simple: 1) Find equipment 2) Select dates 3) Pay deposit 4) Pick up or request delivery 5) Return on time to avoid extra fees.",
+      general: "To rent equipment, browse our catalog on the Search page, select the item you need, choose rental dates, and contact the seller. Need help with anything specific?",
+      process: "Our rental process is simple: 1) Find equipment 2) Select dates 3) Contact Owner 4) Pick up or request delivery 5) Return on time to avoid extra fees.",
       duration: "We offer flexible rental periods from daily to monthly. Longer rentals qualify for progressive discounts.",
       payment: "We accept credit cards, PayPal, and bank transfers. A security deposit is required for all rentals."
     },
     equipment: {
-      types: "We rent construction equipment (excavators, bulldozers), gardening tools (lawn mowers, tillers), power tools, and farm machinery.",
+      types: "We rent Farming equipment (Tractors, bulldozers), gardening tools (lawn mowers, tillers), power tools",
       availability: "Equipment availability varies by location and season. Check our search page for real-time inventory.",
       condition: "All our equipment is regularly serviced and maintained to ensure reliability and safety.",
       popular: "Currently, our most requested items are compact excavators, pressure washers, and portable generators."
     },
     listing: {
-      create: "To list your equipment: 1) Sign in 2) Click 'Create Listing' in the navbar 3) Fill details 4) Upload photos 5) Set rental terms and pricing.",
-      requirements: "To list equipment, you must verify your identity, provide equipment documentation, and set up a payment method.",
-      fees: "We charge 10% commission on successful rentals. No upfront fees to list your equipment.",
+      create: "To list your equipment: 1) Sign in 2) Click 'Create Listing' in the Profile Page 3) Fill details 4) Upload photos 5) Set rental terms and pricing.",
+      requirements: "To list equipment, you must verify your identity, provide equipment documentation, and set up a Deposit and Price.",
+      fees: "We does not charge any commission on successful rentals. No upfront fees to list your equipment.",
       insurance: "We provide optional insurance coverage for both owners and renters. Details can be found on our Insurance page."
     },
     account: {
-      signup: "To create an account, click 'Sign Up' at the top right, fill the form, verify your email, and you're ready to go!",
+      signup: "To create an account, click 'Sign Up' at the top right, fill the form or Continue with Google, and you're ready to go!",
       login: "Having trouble logging in? Click 'Forgot Password' or contact support for immediate assistance.",
-      profile: "Manage your profile by clicking your username after logging in. You can update contact info, payment methods, and preferences."
+      profile: "Manage your profile by clicking your username after logging in. You can update Profile picture, username, and password."
     },
     pricing: {
       structure: "Pricing depends on equipment type, rental duration, and location. Discounts apply for longer rentals.",
       deposit: "A security deposit is required for all rentals, typically 20-50% of the equipment value.",
-      discounts: "We offer discounts for first-time users (15% off), weekly rentals (10% off), and monthly rentals (25% off)."
+      discounts: "Owner can offer discounts for first-time users, weekly rentals, and monthly rentals."
     },
     delivery: {
       options: "We offer pickup at our locations or delivery service within 50 miles radius for an additional fee.",
-      fees: "Delivery fees start at $30 and depend on distance and equipment size.",
-      timing: "Standard delivery is within 24 hours. Express delivery (4-hour) is available for an additional fee."
+      fees: "Delivery Fee Depends on the owner",
+      timing: "Depends on the owner."
     },
     return: {
       process: "Return equipment to the same location you picked it up from, or schedule a pickup if you chose delivery.",
       late: "Late returns incur a fee of 150% of the daily rate for each day overdue.",
-      damage: "Equipment returned damaged will be assessed by our team. Repair costs may be deducted from your deposit."
+      damage: "Equipment returned damaged will be assessed by Owner. Repair costs may be deducted from your deposit."
     },
     support: {
       contact: "Reach our support team via the Contact page, email at support@farmtech.com, or call (555) 123-4567.",
@@ -58,7 +58,7 @@ const Chatbot = () => {
       emergency: "For after-hours emergencies with rented equipment, call our 24/7 hotline: (555) 987-6543."
     },
     location: {
-      stores: "We have rental centers in Denver, Phoenix, Seattle, and Atlanta with more locations opening soon.",
+      stores: "We have rental centers in all over India.",
       hours: "Our rental centers are open Monday-Saturday 7am-7pm and Sunday 9am-4pm.",
       directions: "Find detailed directions to each location on our Locations page or contact support for assistance."
     }
